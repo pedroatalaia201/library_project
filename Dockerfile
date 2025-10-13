@@ -8,7 +8,7 @@ RUN apt-get update -qq && apt-get install -y --no-install-recommends \
   && rm -rf /var/lib/apt/lists/*
 
 # Define work directory inside the container
-WORKDIR  /app
+WORKDIR  /library/app
 
 # Set enviroment variables for bundler
 ENV BUNDLE_PATH=/usr/local/bundle \
