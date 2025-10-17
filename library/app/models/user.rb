@@ -1,3 +1,0 @@
-class User < ApplicationRecord
-  # Here'll be added stuff...
-end
