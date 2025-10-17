@@ -1,0 +1,32 @@
+version: '3.9'
+
+services:
+  library:
+    build: .
+    image: library
+    environment:
+      - DBHOST=postgresql
+      - DBUSER=postgres
+      - DBPASS=password
+    ports:
+      - 3000:3000
+    depends_on:
+      - postgresql
+    volumes:
+      - .:/app # guarantee the the chages will reflect on my local directory
+
+  postgresql:
+    image: postgres
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_DB: library_development 
+      POSTRGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    volumes:
+      - postgresdb:/var/lib/postgresql/data/
+
+volumes:
+  postgresdb:
+
+
