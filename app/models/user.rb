@@ -1,8 +1,10 @@
-require 'bcrypt'
-
 class User < ApplicationRecord
   has_secure_password
 
+  # Validations -------------
+  validates :email, uniqueness: true
+
+  # Enums -------------------
   enum roles: { reader: 0, author: 1 }
 
   class << self

@@ -19,7 +19,13 @@ class UsersController < ApplicationController
   end
 
   def auth
-    # It'll be necessary to create the user first
+    user = User.find_by(email: user_params[:email])
+
+    if user.present?
+      auth_user(user: user, password: user_params[:password])
+    else
+      not_authenticated_user_message
+    end
   end
 
   private
