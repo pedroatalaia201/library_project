@@ -1,5 +1,8 @@
+# frozen_string_literal: true
+
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show]
+  before_action      :set_user, only: [:show]
+  skip_before_action :login
 
   def index
     render json: User.all, status: :ok
@@ -9,7 +12,8 @@ class UsersController < ApplicationController
     render json: @user, status: :ok
   end
 
-  def sign_up # same as create
+  # same as create
+  def sign_up
     user = User.new(**user_params)
 
     if user.save!
@@ -19,11 +23,13 @@ class UsersController < ApplicationController
     end
   end
 
-  def auth
+  def login
     user = User.find_by(email: user_params[:email])
 
-    if user.present?
-      auth_user(user: user, password: user_params[:password])
+    if user.present? && user.authenticate(user_params[:password])
+      token = JsonWebToken.encode(user_id: user.id)
+
+      render json: { token: token }, status: :ok
     else
       not_authenticated_user_message
     end

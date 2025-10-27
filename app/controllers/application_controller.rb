@@ -1,18 +1,26 @@
-class ApplicationController < ActionController::API
-  private
+# frozen_string_literal: true
 
-  def auth_user(user:, password:)
-    if user.authenticate(password)
-      @sys_user = user
-      render json: user, status: :ok
-    else
-      not_authenticated_user_message
+class ApplicationController < ActionController::API
+  before_action :auth_user
+
+  def auth_user
+    header = request.header['auth']
+    header = header.split(' ').last if header
+
+    begin
+      @decoded      = JsonWebToken.decode(header)
+      @current_user = User.find(@decoded[:user_id])
+    rescue ActiveRecord::RecordNotFound => e
+      render json: { errors: e.message }, status: :unauthorized
+    rescue JWT::DecodeError => e
+      render json: { errors: e.message }, status: :unauthorized
     end
   end
 
-  # Need to set the geme jwt first...
+  private
+
   def check_if_user_is_authenticated
-    deny_message if @sys_user.nil?
+    deny_message if @current_user.nil?
   end
 
   def deny_message
