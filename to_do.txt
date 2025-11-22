@@ -1,0 +1,4 @@
+Todos:
+[] Keep implementing the bycript;
+[] Create a makefile for make easier to run the docker commands;
+[] Create the Book model;

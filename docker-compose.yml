@@ -16,7 +16,7 @@ services:
       - .:/app # guarantee the the chages will reflect on my local directory
 
   postgresql:
-    image: postgres
+    image: postgres:17
     ports:
       - 5432:5432
     environment:
